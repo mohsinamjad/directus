@@ -32,11 +32,13 @@ import 'tinymce/plugins/preview/plugin';
 import 'tinymce/plugins/fullscreen/plugin';
 import 'tinymce/plugins/directionality/plugin';
 import 'tinymce/icons/default';
+import 'tinymce/plugins/codesample/plugin';
 
 import Editor from '@tinymce/tinymce-vue';
 
 import getEditorStyles from './get-editor-styles';
 
+import './prism/prism';
 type CustomFormat = {
 	title: string;
 	inline: string;
@@ -118,10 +120,11 @@ export default defineComponent({
 			return {
 				skin: false,
 				skin_url: false,
-				content_css: false,
+				content_css_cors: true,
+				content_css: ['https://unpkg.com/prismjs/themes/prism-tomorrow.css'],
 				content_style: getEditorStyles(props.font as 'sans-serif' | 'serif' | 'monospace', props.disabled),
 				plugins:
-					'media table hr lists image link pagebreak code insertdatetime autoresize paste preview fullscreen directionality',
+					'media table hr lists image link pagebreak insertdatetime autoresize paste preview fullscreen directionality codesample code',
 				branding: false,
 				max_height: 1000,
 				elementpath: false,
@@ -130,6 +133,22 @@ export default defineComponent({
 				convert_urls: false,
 				extended_valid_elements: 'audio[loop],source',
 				toolbar: toolbarString,
+				selector: 'textarea',
+				codesample_languages: [
+					{ text: 'HTML/XML', value: 'markup' },
+					{ text: 'JavaScript', value: 'javascript' },
+					{ text: 'CSS', value: 'css' },
+					{ text: 'PHP', value: 'php' },
+					{ text: 'Ruby', value: 'ruby' },
+					{ text: 'Python', value: 'python' },
+					{ text: 'Java', value: 'java' },
+					{ text: 'C', value: 'c' },
+					{ text: 'C#', value: 'csharp' },
+					{ text: 'C++', value: 'cpp' },
+					{ text: 'Yaml', value: 'yaml' },
+					{ text: 'Go', value: 'go' },
+					{ text: 'Bash', value: 'bash' },
+				],
 				style_formats: styleFormats,
 				...(props.tinymceOverrides || {}),
 			};

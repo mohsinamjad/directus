@@ -524,6 +524,7 @@ wysiwyg_options:
   subscript: Subscript
   superscript: Superscript
   codeblock: Code
+  codesample: Code Sample
   blockquote: Blockquote
   bullist: Bullet List
   numlist: Numbered List

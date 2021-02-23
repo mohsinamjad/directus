@@ -214,6 +214,10 @@ export default defineInterface(({ i18n }) => ({
 							value: 'ltr rtl',
 							text: i18n.t('wysiwyg_options.directionality'),
 						},
+						{
+							value: 'codesample',
+							text: i18n.t('wysiwyg_options.codesample'),
+						},
 					],
 				},
 			},
