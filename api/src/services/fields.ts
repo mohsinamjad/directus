@@ -276,7 +276,7 @@ export class FieldsService {
 
 		await this.knex('directus_fields').delete().where({ collection, field });
 
-		if (field in this.schema.tables[collection].columns) {
+		if (this.schema.tables[collection] && field in this.schema.tables[collection].columns) {
 			await this.knex.schema.table(collection, (table) => {
 				table.dropColumn(field);
 			});
@@ -330,6 +330,11 @@ export class FieldsService {
 		if (field.schema?.default_value !== undefined) {
 			if (typeof field.schema.default_value === 'string' && field.schema.default_value.toLowerCase() === 'now()') {
 				column.defaultTo(this.knex.fn.now());
+			} else if (
+				typeof field.schema.default_value === 'string' &&
+				['"null"', 'null'].includes(field.schema.default_value.toLowerCase())
+			) {
+				column.defaultTo(null);
 			} else {
 				column.defaultTo(field.schema.default_value);
 			}

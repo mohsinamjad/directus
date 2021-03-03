@@ -114,7 +114,6 @@ schema_setup_title: '¿Cómo debería guardarse este campo en la base de datos?'
 schema_field_title: '¿Cómo debería comportarse este campo en la aplicación?'
 create_field: Crear Campo
 creating_new_field: 'Nuevo Campo ({collection})'
-updating_field_field: '{field}({collection})'
 reset_page_preferences: Restablecer Preferencias de Página
 hidden_field: Campo Oculto
 hidden_on_detail: Oculto en detalle
@@ -155,7 +154,6 @@ choose_a_type: Elegir un Tipo...
 determined_by_relationship: Determinado por la Relación
 add_note: Añadir una nota útil para los usuarios...
 default_value: Valor por Defecto
-add_a_default_value: Agregar un valor por defecto...
 interface_setup_title: '¿Cómo los usuarios interactuarán con este campo?'
 display_setup_title: '¿Cómo el valor de este campo debería ser presentado?'
 standard_field: Campo Estándar

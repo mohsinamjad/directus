@@ -175,7 +175,11 @@ body.dark .tox .tox-toolbar__overflow {
 /* Modal */
 
 .tox .tox-dialog-wrap__backdrop {
-	background-color: rgba(0, 0, 0, 0.75);
+	background-color: var(--v-overlay-color);
+}
+
+.tox.tox-tinymce-aux {
+	z-index: 510;
 }
 
 .tox .tox-dialog {
@@ -194,6 +198,10 @@ body.dark .tox .tox-toolbar__overflow {
 	color: var(--foreground-normal);
 	font-size: 16px;
 	background-color: var(--background-page);
+}
+
+.tox .tox-dialog__body {
+	color: var(--foreground-normal);
 }
 
 .tox .tox-dialog__body-content {

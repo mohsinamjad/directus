@@ -23,8 +23,7 @@ import { AuthorizationService } from './authorization';
 
 import { pick, clone, cloneDeep, merge } from 'lodash';
 import getDefaultValue from '../utils/get-default-value';
-import { InvalidPayloadException } from '../exceptions';
-import { ForbiddenException } from '../exceptions';
+import { InvalidPayloadException, ForbiddenException } from '../exceptions';
 
 export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractService {
 	collection: string;
@@ -153,7 +152,9 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 					delta: JSON.stringify(payloads[index]),
 				}));
 
-				await trx.insert(revisionRecords).into('directus_revisions');
+				if (revisionRecords.length > 0) {
+					await trx.insert(revisionRecords).into('directus_revisions');
+				}
 			}
 
 			if (cache && env.CACHE_AUTO_PURGE) {
@@ -351,7 +352,9 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 						delta: JSON.stringify(payloadWithoutAliases),
 					}));
 
-					await trx.insert(revisionRecords).into('directus_revisions');
+					if (revisionRecords.length > 0) {
+						await trx.insert(revisionRecords).into('directus_revisions');
+					}
 				}
 			});
 
@@ -486,7 +489,9 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 					item: key,
 				}));
 
-				await trx.insert(activityRecords).into('directus_activity');
+				if (activityRecords.length > 0) {
+					await trx.insert(activityRecords).into('directus_activity');
+				}
 			}
 		});
 

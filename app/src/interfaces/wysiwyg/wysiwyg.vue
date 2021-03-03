@@ -8,6 +8,17 @@
 			@onFocusIn="setFocus(true)"
 			@onFocusOut="setFocus(false)"
 		/>
+		<v-dialog :active="_imageDialogOpen" @toggle="unsetImageUploadHandler" @esc="unsetImageUploadHandler">
+			<v-card>
+				<v-card-title>{{ $t('upload_from_device') }}</v-card-title>
+				<v-card-text>
+					<v-upload @input="onImageUpload" :multiple="false" from-library from-url />
+				</v-card-text>
+				<v-card-actions>
+					<v-button @click="unsetImageUploadHandler" secondary>{{ $t('cancel') }}</v-button>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 	</div>
 </template>
 
@@ -39,6 +50,9 @@ import Editor from '@tinymce/tinymce-vue';
 import getEditorStyles from './get-editor-styles';
 
 import './prism/prism';
+import { getPublicURL } from '@/utils/get-root-path';
+import { addTokenToURL } from '@/api';
+
 type CustomFormat = {
 	title: string;
 	inline: string;
@@ -77,7 +91,7 @@ export default defineComponent({
 		},
 		font: {
 			type: String as PropType<'sans-serif' | 'serif' | 'monospace'>,
-			default: 'serif',
+			default: 'sans-serif',
 		},
 		customFormats: {
 			type: Array as PropType<CustomFormat[]>,
@@ -91,9 +105,16 @@ export default defineComponent({
 			type: Boolean,
 			default: true,
 		},
+		imageToken: {
+			type: String,
+			default: undefined,
+		},
 	},
 	setup(props, { emit }) {
 		const editorElement = ref<Vue | null>(null);
+		const imageUploadHandler = ref<CallableFunction | null>(null);
+
+		const _imageDialogOpen = computed(() => !!imageUploadHandler.value);
 
 		const _value = computed({
 			get() {
@@ -122,7 +143,7 @@ export default defineComponent({
 				skin_url: false,
 				content_css_cors: true,
 				content_css: ['https://unpkg.com/prismjs/themes/prism-tomorrow.css'],
-				content_style: getEditorStyles(props.font as 'sans-serif' | 'serif' | 'monospace', props.disabled),
+				content_style: getEditorStyles(props.font as 'sans-serif' | 'serif' | 'monospace'),
 				plugins:
 					'media table hr lists image link pagebreak insertdatetime autoresize paste preview fullscreen directionality codesample code',
 				branding: false,
@@ -150,11 +171,57 @@ export default defineComponent({
 					{ text: 'Bash', value: 'bash' },
 				],
 				style_formats: styleFormats,
+				file_picker_types: 'image media',
+				file_picker_callback: setImageUploadHandler,
+				urlconverter_callback: urlConverter,
+				link_default_protocol: 'https',
 				...(props.tinymceOverrides || {}),
 			};
 		});
 
-		return { editorElement, editorOptions, _value, setFocus };
+		return {
+			editorElement,
+			editorOptions,
+			_value,
+			setFocus,
+			onImageUpload,
+			unsetImageUploadHandler,
+			_imageDialogOpen,
+		};
+
+		function onImageUpload(file: Record<string, any>) {
+			if (imageUploadHandler.value) imageUploadHandler.value(file);
+			unsetImageUploadHandler();
+		}
+
+		function setImageUploadHandler(cb: CallableFunction, value: any, meta: Record<string, any>) {
+			imageUploadHandler.value = (result: Record<string, any>) => {
+				if (meta.filetype === 'image' && !/^image\//.test(result.type)) return;
+
+				const imageUrl = getPublicURL() + 'assets/' + result.id;
+
+				cb(imageUrl, {
+					alt: result.title,
+					title: result.title,
+					width: (result.width || '').toString(),
+					height: (result.height || '').toString(),
+				});
+			};
+		}
+
+		function urlConverter(url: string, node: string) {
+			if (url && props.imageToken && ['img', 'source', 'poster', 'audio'].includes(node)) {
+				const baseUrl = getPublicURL() + 'assets/';
+				if (url.includes(baseUrl)) {
+					url = addTokenToURL(url, props.imageToken);
+				}
+			}
+			return url;
+		}
+
+		function unsetImageUploadHandler() {
+			imageUploadHandler.value = null;
+		}
 
 		function setFocus(val: boolean) {
 			if (editorElement.value == null) return;

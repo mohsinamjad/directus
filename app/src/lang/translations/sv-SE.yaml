@@ -114,7 +114,6 @@ schema_setup_title: Hur ska detta fält spara till databasen?
 schema_field_title: Hur ska detta fält bete sig i appen?
 create_field: Skapa fält
 creating_new_field: 'Nytt fält ({collection})'
-updating_field_field: '{field} ({collection})'
 reset_page_preferences: Återställ sidans inställningar
 hidden_field: Dolt fält
 hidden_on_detail: Dolt på detaljnivå
@@ -155,7 +154,6 @@ choose_a_type: Välj en typ...
 determined_by_relationship: Bestämd av relation
 add_note: Lägg till kommentar för användare...
 default_value: Standardvärde
-add_a_default_value: Lägg till ett standardvärde...
 interface_setup_title: Hur kommer användarna att interagera med detta fält?
 display_setup_title: Hur ska det här fältets värde visas?
 standard_field: Standardfält

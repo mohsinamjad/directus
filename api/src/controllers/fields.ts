@@ -7,6 +7,7 @@ import Joi from 'joi';
 import { types, Field } from '../types';
 import useCollection from '../middleware/use-collection';
 import { respond } from '../middleware/respond';
+import { ALIAS_TYPES } from '../constants';
 
 const router = Router();
 
@@ -66,14 +67,16 @@ const newFieldSchema = Joi.object({
 	collection: Joi.string().optional(),
 	field: Joi.string().required(),
 	type: Joi.string()
-		.valid(...types)
+		.valid(...types, ...ALIAS_TYPES)
 		.allow(null)
 		.required(),
 	schema: Joi.object({
 		default_value: Joi.any(),
 		max_length: [Joi.number(), Joi.string(), Joi.valid(null)],
 		is_nullable: Joi.bool(),
-	}).unknown(),
+	})
+		.unknown()
+		.allow(null),
 	meta: Joi.any(),
 });
 
@@ -150,12 +153,16 @@ router.patch(
 );
 
 const updateSchema = Joi.object({
-	type: Joi.string().valid(...types),
+	type: Joi.string()
+		.valid(...types, ...ALIAS_TYPES)
+		.allow(null),
 	schema: Joi.object({
 		default_value: Joi.any(),
 		max_length: [Joi.number(), Joi.string(), Joi.valid(null)],
 		is_nullable: Joi.bool(),
-	}).unknown(),
+	})
+		.unknown()
+		.allow(null),
 	meta: Joi.any(),
 }).unknown();
 

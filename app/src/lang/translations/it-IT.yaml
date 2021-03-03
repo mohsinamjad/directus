@@ -101,7 +101,6 @@ iso: ISO
 focal_length: Lunghezza Focale
 create_field: Crea campo
 creating_new_field: 'Nuovo Campo ({collection})'
-updating_field_field: '{field} ({collection})'
 reset_page_preferences: Reimposta Preferenze Di Pagina
 hidden_field: Campo Nascosto
 hidden_on_detail: Nascosto nei dettagli
@@ -139,7 +138,6 @@ choose_a_type: Seleziona un Tipo...
 determined_by_relationship: Determinato dalla Relazione
 add_note: Aggiungi una nota utile per gli utenti ...
 default_value: Valore predefinito
-add_a_default_value: Aggiungi un valore predefinito...
 interface_setup_title: Come interagiranno gli utenti con questo campo?
 display_setup_title: Come dovrebbe essere visualizzato il valore di questo campo?
 standard_field: Campo Standard

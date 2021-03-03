@@ -85,7 +85,7 @@ export default defineComponent({
 				.map((field) => ({
 					field: field.field,
 					name: field.name,
-					disabled: ['json', 'o2m', 'm2o', 'file', 'files', 'alias', 'presentation'].includes(field.type),
+					disabled: ['json', 'o2m', 'm2o', 'm2a', 'file', 'files', 'alias', 'presentation'].includes(field.type),
 				}));
 		});
 

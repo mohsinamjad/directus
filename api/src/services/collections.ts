@@ -130,8 +130,10 @@ export class CollectionsService {
 
 		const tablesInDatabase = await schemaInspector.tableInfo();
 		const tables = tablesInDatabase.filter((table) => collectionKeys.includes(table.name));
+
 		const meta = (await collectionItemsService.readByQuery({
 			filter: { collection: { _in: collectionKeys } },
+			limit: -1,
 		})) as CollectionMeta[];
 
 		meta.push(...systemCollectionRows);
@@ -151,12 +153,13 @@ export class CollectionsService {
 		return Array.isArray(collection) ? collections : collections[0];
 	}
 
-	/** @todo, read by query without query support is a bit ironic, isnt it */
+	/** @todo, read by query without query support is a bit ironic, isn't it */
 	async readByQuery(): Promise<Collection[]> {
 		const collectionItemsService = new ItemsService('directus_collections', {
 			knex: this.knex,
 			schema: this.schema,
 		});
+
 		let tablesInDatabase = await schemaInspector.tableInfo();
 
 		if (this.accountability && this.accountability.admin !== true) {
@@ -169,11 +172,17 @@ export class CollectionsService {
 			tablesInDatabase = tablesInDatabase.filter((table) => {
 				return collectionsYouHavePermissionToRead.includes(table.name);
 			});
+
+			if (tablesInDatabase.length === 0) {
+				throw new ForbiddenException();
+			}
 		}
 
 		const tablesToFetchInfoFor = tablesInDatabase.map((table) => table.name);
+
 		const meta = (await collectionItemsService.readByQuery({
 			filter: { collection: { _in: tablesToFetchInfoFor } },
+			limit: -1,
 		})) as CollectionMeta[];
 
 		meta.push(...systemCollectionRows);
