@@ -18,3 +18,13 @@ FROM base as development
 RUN rm -rf /var/cache/apk/*
 
 ENTRYPOINT ["config/docker-entrypoint.sh"]
+
+
+
+FROM base as production
+
+COPY . .
+
+RUN rm -rf /var/cache/apk/*
+
+ENTRYPOINT ["config/docker-entrypoint.prod.sh"]

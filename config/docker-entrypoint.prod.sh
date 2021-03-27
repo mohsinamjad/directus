@@ -71,7 +71,5 @@ else
 fi
 
 bootstrap
-
-exec npm run dev
-# exec npx directus "${command}" $@
+exec npx directus start $@
 

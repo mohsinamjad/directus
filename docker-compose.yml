@@ -1,10 +1,13 @@
+# DUMP DB
+# docker exec -t your-db-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+# cat your_dump.sql | docker exec -i your-db-container psql -U postgres
 version: '3.7'
 services:
   database:
     container_name: database
     image: postgres:12
     volumes:
-      - ./data/database:/var/lib/postgresql/data
+      - directus-db:/var/lib/postgresql/data
     networks:
       - directus
     ports:
@@ -51,8 +54,11 @@ services:
       CACHE_STORE: 'redis'
       CACHE_REDIS: 'redis://cache:6379'
 
-      ADMIN_EMAIL: 'admin@example.com'
-      ADMIN_PASSWORD: 'd1r3ctu5'
+      ADMIN_EMAIL: 'admin@root.com'
+      ADMIN_PASSWORD: 'directus'
 
 networks:
   directus:
+
+volumes: 
+  directus-db:

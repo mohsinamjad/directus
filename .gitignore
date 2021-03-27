@@ -16,3 +16,4 @@ dist
 .history
 /.idea/
 app/public/img/docs/*
+*.sql
